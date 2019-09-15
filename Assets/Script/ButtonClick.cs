@@ -10,6 +10,8 @@ public class ButtonClick : MonoBehaviour
     private float coolTimeCheckSpeed = 0.1f;
     private float increaseFillAmount;
     private bool isClickable = true;
+    public GameObject inventoryPanel;
+    public Item newItem;
 
     void Start()
     {   
@@ -26,6 +28,17 @@ public class ButtonClick : MonoBehaviour
             StartCoroutine("ResetCoolTime");
         }
 
+    }
+
+    public void OnClickInventory()
+    {
+        Debug.Log("OnClickInventory");
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+    }
+
+    public void OnClickAddItem()
+    {
+        InventoryManager.instance.AddItem(newItem);
     }
 
     IEnumerator ResetCoolTime()
