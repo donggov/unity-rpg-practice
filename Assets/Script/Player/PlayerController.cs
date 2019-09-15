@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class PlayerController : Character
 {
+    #region Singleton
+    public static PlayerController instance = null;
+
+    private void Awake()
+    {
+        if (instance == null) instance = this;
+        DontDestroyOnLoad(instance);
+    }
+    #endregion
+
     void Start()
     {
     }

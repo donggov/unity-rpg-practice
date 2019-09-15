@@ -18,6 +18,12 @@ public class ButtonClick : MonoBehaviour
         increaseFillAmount = coolTimeCheckSpeed / coolTime;
     }
 
+    public void OnClickAttack()
+    {
+        Debug.Log("OnClickAttack");
+        PlayerController.instance.StartAttack();
+    }
+
     public void OnClick()
     {
         Debug.Log("OnClick");

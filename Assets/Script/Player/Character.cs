@@ -9,6 +9,23 @@ public class Character : MonoBehaviour
     protected Vector2 direction;
     public Animator animator;
     public SpriteRenderer spriteRenderer;
+    protected bool isAttacking = false;
+    public float attackSpeed = 0.8f;
+
+    public bool IsMoving
+    {
+        get
+        {
+            return direction.x != 0 || direction.y != 0;
+        }
+    }
+
+    public enum LayerName
+    {
+        IdleLayer = 0,
+        WalkLayer = 1,
+        AttackLayer = 2,
+    }
 
     void Start()
     {
@@ -17,21 +34,77 @@ public class Character : MonoBehaviour
 
     protected virtual void Update()
     {
+        HandleLayers();
+    }
+
+    private void FixedUpdate()
+    {
         Move();
-        AnimateMovement();
     }
 
     public void Move()
     {
+        if (isAttacking) return;
+
         if (direction.x > 0) spriteRenderer.flipX = false;
         else if (direction.x < 0) spriteRenderer.flipX = true;
 
         transform.Translate(direction * speed * Time.deltaTime);
     }
 
-    public void AnimateMovement()
+    public void HandleLayers()
     {
-        animator.SetBool("isWalk", (direction.x > 0 || direction.x < 0 || direction.y > 0 || direction.y < 0));
+        PlayerController.instance.animator.SetBool("isMoving", IsMoving);
+
+        /*
+        if (isAttacking)
+        {
+            ActivateLayer(LayerName.AttackLayer);
+        } else if (IsMoving)
+        {
+            ActivateLayer(LayerName.WalkLayer);
+        }
+        else
+        {
+            ActivateLayer(LayerName.IdleLayer);
+        }
+        */
+    }
+
+    public void ActivateLayer(LayerName layerName)
+    {
+        for (int i = 0; i < animator.layerCount; i++)
+        {
+            animator.SetLayerWeight(i, 0);
+        }
+
+        animator.SetLayerWeight((int)layerName, 1);
+    }
+
+
+    public void StartAttack()
+    {
+        if(!isAttacking)
+        {
+            StartCoroutine("AttackCoroutine");
+        }
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        isAttacking = true;
+        PlayerController.instance.animator.SetTrigger("trigerAttack");
+        yield return new WaitForSeconds(attackSpeed);
+        StopAttack();
+    }
+
+    public void StopAttack()
+    {
+        isAttacking = false;
+        PlayerController.instance.animator.SetTrigger("trigerAttack");
+        StopCoroutine("AttackCoroutine");
     }
 
 }
+
+
