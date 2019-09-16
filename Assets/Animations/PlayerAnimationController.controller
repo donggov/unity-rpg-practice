@@ -203,7 +203,7 @@ AnimatorState:
   m_SpeedParameter: attackSpeed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_TimeParameter: attackSpeed
 --- !u!1102 &1102279800237730260
 AnimatorState:
   serializedVersion: 5

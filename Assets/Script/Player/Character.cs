@@ -11,6 +11,7 @@ public class Character : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     protected bool isAttacking = false;
     public float attackSpeed = 1.0f;
+    public Rigidbody2D myRigid2D;
 
     public bool isMoving
     {
@@ -31,6 +32,8 @@ public class Character : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         animator.SetFloat("attackSpeed", attackSpeed);
+
+        myRigid2D = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void Update()
@@ -45,12 +48,16 @@ public class Character : MonoBehaviour
 
     public void Move()
     {
-        if (isAttacking) return;
+        if (isAttacking) {
+            myRigid2D.velocity = direction.normalized * 0;
+            return;
+        }
 
         if (direction.x > 0) spriteRenderer.flipX = false;
         else if (direction.x < 0) spriteRenderer.flipX = true;
 
-        transform.Translate(direction * speed * Time.deltaTime);
+        //transform.Translate(direction * speed * Time.deltaTime);
+        myRigid2D.velocity = direction.normalized * speed;
     }
 
     public void HandleLayers()
