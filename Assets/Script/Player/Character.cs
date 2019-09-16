@@ -10,9 +10,9 @@ public class Character : MonoBehaviour
     public Animator animator;
     public SpriteRenderer spriteRenderer;
     protected bool isAttacking = false;
-    public float attackSpeed = 0.8f;
+    public float attackSpeed = 1.0f;
 
-    public bool IsMoving
+    public bool isMoving
     {
         get
         {
@@ -30,6 +30,7 @@ public class Character : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        animator.SetFloat("attackSpeed", attackSpeed);
     }
 
     protected virtual void Update()
@@ -54,13 +55,10 @@ public class Character : MonoBehaviour
 
     public void HandleLayers()
     {
-        PlayerController.instance.animator.SetBool("isMoving", IsMoving);
-
-        /*
         if (isAttacking)
         {
             ActivateLayer(LayerName.AttackLayer);
-        } else if (IsMoving)
+        } else if (isMoving)
         {
             ActivateLayer(LayerName.WalkLayer);
         }
@@ -68,7 +66,6 @@ public class Character : MonoBehaviour
         {
             ActivateLayer(LayerName.IdleLayer);
         }
-        */
     }
 
     public void ActivateLayer(LayerName layerName)
@@ -84,25 +81,18 @@ public class Character : MonoBehaviour
 
     public void StartAttack()
     {
-        if(!isAttacking)
+        if (!isAttacking)
         {
-            StartCoroutine("AttackCoroutine");
+            isAttacking = true;
+            animator.SetBool("isAttacking", isAttacking);
         }
-    }
-
-    private IEnumerator AttackCoroutine()
-    {
-        isAttacking = true;
-        PlayerController.instance.animator.SetTrigger("trigerAttack");
-        yield return new WaitForSeconds(attackSpeed);
-        StopAttack();
     }
 
     public void StopAttack()
     {
+        Debug.Log("StopAttack");
         isAttacking = false;
-        PlayerController.instance.animator.SetTrigger("trigerAttack");
-        StopCoroutine("AttackCoroutine");
+        animator.SetBool("isAttacking", isAttacking);
     }
 
 }

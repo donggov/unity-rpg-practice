@@ -2452,6 +2452,7 @@ MonoBehaviour:
   speed: 5
   animator: {fileID: 1385124673}
   spriteRenderer: {fileID: 1385124674}
+  attackSpeed: 1
 --- !u!95 &1385124673 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 956575030494387086, guid: 1fabca482c48ff042802f9e7aba36db3,
